@@ -1,0 +1,5 @@
+---
+# defaults file for bootstrap
+
+rhsm_activation_key: "IHQStandard"
+rhsm_org_id: "6819734"

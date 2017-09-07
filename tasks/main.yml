@@ -1,0 +1,48 @@
+---
+# tasks file for bootstrap
+
+- name: Include OS specific setup tasks
+  include: config-{{ ansible_os_family }}.yml
+  #include: setup-{{ ansible_os_family }}.yml
+
+- name: set SELinux to permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+- name: install yum utils
+  yum:
+    name: yum-utils
+    state: latest
+- name: install open-vm-tools
+  yum:
+    name: open-vm-tools
+    state: latest
+  when: ansible_virtualization_type == "VMware"
+- name: stop logging services - rsyslog
+  service:
+    name: rsyslog
+    state: stopped
+# We have to do it like this due to SysVinit to Systemd weirdness. This is the prescribed workaround per RedHat.
+- name: stop logging services - auditd
+  command: service auditd stop
+- name: remove old kernels
+  command: package-cleanup -y --oldkernels --count=2
+- name: clean out yum
+  command: yum clean all
+- name: force logs to rotate
+  command: logrotate -f /etc/logrotate.conf
+- name: remove unnecessary logs
+  file:
+    path: /var/log/{{ item }}
+    state: absent
+  with_items:
+   - '*-????????'
+   - 'dmesg.old'
+   - 'anaconda'
+#- name: remove unneeded logs
+#  command: find /var/log -type f \( -name "*-????????" -o -name "dmesg.old -o -name "anaconda" \) -delete
+# TODO - set variables so that logs can be truncated
