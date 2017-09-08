@@ -1,9 +1,8 @@
 ---
 # tasks file for bootstrap
 
-- name: Include OS specific setup tasks
-  include: config-{{ ansible_os_family }}.yml
-  #include: setup-{{ ansible_os_family }}.yml
+- include: config-RedHat.yml
+  when: ansible_os_family == 'RedHat'
 
 - name: set SELinux to permissive mode
   selinux:
