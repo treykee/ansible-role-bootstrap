@@ -14,7 +14,7 @@ services:
 
 before_install:
   # Pull the image from Docker Hub for the OS under test.
-  - 'docker pull centos/7'
+  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
 script:
   # Create a random file to store the container ID.
   - container_id=$(mktemp)
