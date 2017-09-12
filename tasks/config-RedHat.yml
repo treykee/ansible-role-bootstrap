@@ -4,7 +4,3 @@
     state: present
     activationkey: "{{ rhsm_activation_key }}"
     org_id: "{{ rhsm_org_id }}"
-
-- name: Install EPEL repository
-  include_role:
-    name: repo-epel

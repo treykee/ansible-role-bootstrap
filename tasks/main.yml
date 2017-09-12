@@ -1,6 +1,9 @@
 ---
 # tasks file for bootstrap
 
+dependencies:
+  - { role: bootstrap }
+
 - include: config-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
